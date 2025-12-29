@@ -1,0 +1,439 @@
+{% extends 'hospital/homebase.html' %}
+{% load static %}
+
+{% block content %}
+
+<head>
+  <style>
+    :root {
+      --primary-blue: #1a6b8c;
+      --primary-teal: #2a9d8f;
+      --accent-green: #8ac926;
+      --dark-blue: #15546e;
+      --light-bg: #f8fbfc;
+    }
+
+    .doctor-hero {
+      background: linear-gradient(135deg, 
+                  rgba(26, 107, 140, 0.85) 0%, 
+                  rgba(21, 84, 110, 0.85) 100%),
+                  url('{% static "images/doctor-bg.png" %}');
+      background-size: cover;
+      background-position: center;
+      padding: 120px 0 100px;
+      color: white;
+      text-align: center;
+      border-radius: 0 0 30px 30px;
+      margin-top: -20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      padding: 50px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .doctor-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, 
+                  transparent 0%, 
+                  rgba(255, 255, 255, 0.1) 50%, 
+                  transparent 100%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .doctor-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 12px 30px;
+      border-radius: 30px;
+      margin-bottom: 30px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .doctor-hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .doctor-hero .lead {
+      font-size: 1.4rem;
+      margin-bottom: 30px;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+
+    .doctor-buttons {
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .glass-button {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 18px 45px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 15px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      min-width: 200px;
+    }
+
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-5px) scale(1.05);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .glass-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+                  transparent, 
+                  rgba(255, 255, 255, 0.2), 
+                  transparent);
+      transition: 0.5s;
+    }
+
+    .glass-button:hover::before {
+      left: 100%;
+    }
+
+    .doctor-features {
+      padding: 100px 20px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-blue), var(--primary-teal));
+    }
+
+    .glass-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(26, 107, 140, 0.1) 0%, rgba(42, 157, 143, 0.1) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      font-size: 2.5rem;
+      color: var(--primary-blue);
+      border: 2px solid rgba(26, 107, 140, 0.2);
+    }
+
+    .glass-card h3 {
+      color: var(--dark-blue);
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .glass-card p {
+      color: #6c757d;
+      line-height: 1.7;
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      color: var(--dark-blue);
+      font-size: 2.8rem;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+
+    .section-subtitle {
+      color: #6c757d;
+      font-size: 1.3rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .doctor-benefits {
+      background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+      padding: 100px 20px;
+      border-radius: 30px;
+      margin: 60px auto;
+      max-width: 1200px;
+    }
+
+    .benefit-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 50px;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .benefit-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, rgba(26, 107, 140, 0.1) 0%, rgba(42, 157, 143, 0.1) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary-blue);
+      flex-shrink: 0;
+    }
+
+    .benefit-content h4 {
+      color: var(--dark-blue);
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .benefit-content p {
+      color: #6c757d;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .doctor-hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .doctor-hero .lead {
+        font-size: 1.2rem;
+      }
+      
+      .doctor-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      
+      .glass-button {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .section-title {
+        font-size: 2.2rem;
+      }
+      
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<div class="doctor-hero">
+  <div class="glass-effect">
+    <div class="doctor-badge">
+      <i class="fas fa-user-md me-2"></i>Medical Professionals Portal
+    </div>
+    <h1>Welcome, Doctor</h1>
+    <p class="lead">Join Pakistan Medical Hospital's network of medical professionals. Access your dashboard, manage appointments, and provide exceptional patient care.</p>
+    
+    <div class="doctor-buttons">
+      <a class="glass-button" href="/doctorsignup">
+        <i class="fas fa-file-contract me-2"></i>
+        Apply Now
+      </a>
+      <a class="glass-button" href="/doctorlogin">
+        <i class="fas fa-sign-in-alt me-2"></i>
+        Login Here
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="container doctor-features">
+  <h2 class="section-title">Why Join Our Medical Team?</h2>
+  <p class="section-subtitle">As part of Pakistan Medical Hospital, you'll have access to advanced tools and resources to enhance your medical practice.</p>
+  
+  <div class="feature-grid">
+    <div class="glass-card">
+      <div class="feature-icon">
+        <i class="fas fa-calendar-alt"></i>
+      </div>
+      <h3>Smart Scheduling</h3>
+      <p>Efficient appointment management system with automated reminders and real-time schedule updates for optimal patient flow.</p>
+    </div>
+    
+    <div class="glass-card">
+      <div class="feature-icon">
+        <i class="fas fa-file-medical-alt"></i>
+      </div>
+      <h3>Digital Records</h3>
+      <p>Secure electronic health records accessible from anywhere, with patient history, prescriptions, and lab results in one place.</p>
+    </div>
+    
+    <div class="glass-card">
+      <div class="feature-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <h3>Analytics Dashboard</h3>
+      <p>Comprehensive analytics on patient outcomes, treatment effectiveness, and practice performance metrics.</p>
+    </div>
+    
+    <div class="glass-card">
+      <div class="feature-icon">
+        <i class="fas fa-comments-medical"></i>
+      </div>
+      <h3>Telemedicine</h3>
+      <p>Integrated telemedicine platform for virtual consultations, follow-ups, and remote patient monitoring.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container doctor-benefits">
+  <h2 class="section-title">Benefits for Our Doctors</h2>
+  <p class="section-subtitle">We support our medical professionals with comprehensive benefits and advanced tools.</p>
+  
+  <div class="benefit-list">
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Continuous Education</h4>
+        <p>Access to medical conferences, workshops, and latest research publications for professional development.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-handshake"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Collaborative Network</h4>
+        <p>Connect with specialists across Pakistan for consultations and multidisciplinary case discussions.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-clipboard-check"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Streamlined Workflow</h4>
+        <p>Reduced administrative tasks with automated documentation, billing, and compliance management.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Malpractice Coverage</h4>
+        <p>Comprehensive professional liability insurance and legal support for practicing physicians.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-laptop-medical"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Technology Support</h4>
+        <p>Access to cutting-edge medical technology and dedicated IT support for all digital systems.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-balance-scale"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Competitive Compensation</h4>
+        <p>Attractive compensation packages with performance incentives and flexible working arrangements.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

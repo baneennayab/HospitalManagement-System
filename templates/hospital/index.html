@@ -1,0 +1,585 @@
+{% extends 'hospital/homebase.html' %}
+{% load static %}
+
+{% block content %}
+
+<head>
+  <style>
+    :root {
+      --primary-blue: #1a6b8c;
+      --primary-teal: #2a9d8f;
+      --accent-green: #8ac926;
+      --light-bg: #f8fbfc;
+      --dark-text: #264653;
+      --shadow-light: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --shadow-medium: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, rgba(26, 107, 140, 0.88) 0%, rgba(42, 157, 143, 0.88) 100%), 
+                  url('{% static "images/hospital-bg.png" %}');
+      background-size: cover;
+      background-position: center;
+      padding: 120px 20px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-top: -20px;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23f8fbfc' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+      background-size: cover;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 8px 20px;
+      border-radius: 30px;
+      margin-bottom: 25px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .hero-title {
+      font-size: 3.8rem;
+      font-weight: 800;
+      margin-bottom: 25px;
+      line-height: 1.2;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-title span {
+      color: #8ac926;
+    }
+
+    .hero-subtitle {
+      font-size: 1.4rem;
+      margin-bottom: 45px;
+      opacity: 0.95;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .cta-button {
+      background: linear-gradient(135deg, #8ac926 0%, #7bb820 100%);
+      color: white;
+      border: none;
+      padding: 18px 50px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 25px rgba(138, 201, 38, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 15px 35px rgba(138, 201, 38, 0.5);
+      color: white;
+      text-decoration: none;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .stats-section {
+      background: var(--light-bg);
+      padding: 80px 20px;
+      margin-top: -50px;
+      position: relative;
+      z-index: 3;
+      border-radius: 30px 30px 0 0;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: var(--shadow-light);
+      transition: transform 0.3s ease;
+      border-bottom: 4px solid var(--primary-teal);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .stat-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      font-size: 2.5rem;
+      color: var(--primary-blue);
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary-blue);
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    .stat-text {
+      color: var(--dark-text);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .features-section {
+      padding: 100px 20px;
+      background: white;
+    }
+
+    .section-title {
+      color: var(--dark-text);
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      color: #6c757d;
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 60px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-light);
+      transition: all 0.3s ease;
+      height: 100%;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary-blue), var(--primary-teal));
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-medium);
+      border-color: #e3f2fd;
+    }
+
+    .feature-icon-wrapper {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      color: var(--primary-blue);
+    }
+
+    .feature-title {
+      color: var(--dark-text);
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .feature-text {
+      color: #6c757d;
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .emergency-section {
+      background: linear-gradient(135deg, var(--primary-blue) 0%, #15546e 100%);
+      padding: 100px 20px;
+      text-align: center;
+      border-radius: 30px;
+      margin: 60px auto;
+      max-width: 1000px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emergency-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: url('{% static "images/medical-pattern.png" %}');
+      opacity: 0.1;
+    }
+
+    .emergency-icon {
+      font-size: 4rem;
+      margin-bottom: 30px;
+      color: #8ac926;
+    }
+
+    .emergency-title {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+
+    .emergency-text {
+      font-size: 1.3rem;
+      margin-bottom: 45px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0.95;
+      line-height: 1.7;
+    }
+
+    .emergency-button {
+      background: white;
+      color: var(--primary-blue);
+      border: none;
+      padding: 18px 50px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .emergency-button:hover {
+      background: #f8fbfc;
+      color: var(--primary-blue);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      text-decoration: none;
+    }
+
+    .appointment-section {
+      background: var(--light-bg);
+      padding: 100px 20px;
+      border-radius: 30px;
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .appointment-form {
+      background: white;
+      padding: 50px;
+      border-radius: 25px;
+      box-shadow: var(--shadow-medium);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-title {
+      color: var(--dark-text);
+      font-size: 2.2rem;
+      margin-bottom: 40px;
+      font-weight: 700;
+    }
+
+    .form-control {
+      padding: 15px 20px;
+      border: 2px solid #e3f2fd;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-teal);
+      box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+    }
+
+    @media (max-width: 992px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+      
+      .section-title {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 80px 20px;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .stats-section {
+        padding: 60px 20px;
+      }
+      
+      .stat-number {
+        font-size: 2.5rem;
+      }
+      
+      .emergency-title {
+        font-size: 2.2rem;
+      }
+      
+      .appointment-form {
+        padding: 30px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<div class="hero-section">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <i class="fas fa-certificate me-2"></i>Trusted Healthcare in Pakistan Since 1995
+    </div>
+    <h1 class="hero-title">Advanced Medical Care <span>When You Need It Most</span></h1>
+    <p class="hero-subtitle">Combining world-class medical expertise with compassionate care, we're dedicated to improving health outcomes across Pakistan through innovation and personalized treatment.</p>
+    <a class="cta-button" href="/patientclick">
+      <i class="fas fa-calendar-check me-2"></i>
+      Book Appointment Online
+    </a>
+  </div>
+</div>
+
+<div class="container stats-section">
+  <div class="row g-4">
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="stat-number">250+</div>
+        <div class="stat-text">Specialist Doctors</div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-hospital"></i>
+        </div>
+        <div class="stat-number">150+</div>
+        <div class="stat-text">Beds Available</div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-procedures"></i>
+        </div>
+        <div class="stat-number">50K+</div>
+        <div class="stat-text">Patients Treated</div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-award"></i>
+        </div>
+        <div class="stat-number">24/7</div>
+        <div class="stat-text">Emergency Services</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container features-section">
+  <h2 class="section-title">Comprehensive Healthcare Services</h2>
+  <p class="section-subtitle">We offer a complete range of medical specialties and advanced treatments to meet all your healthcare needs.</p>
+  
+  <div class="row g-4">
+    <div class="col-lg-4 col-md-6">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+        <h3 class="feature-title">Cardiology</h3>
+        <p class="feature-text">Advanced cardiac care with state-of-the-art catheterization labs and non-invasive diagnostic facilities.</p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h3 class="feature-title">Neurology</h3>
+        <p class="feature-text">Comprehensive neurological care including stroke management, epilepsy treatment, and rehabilitation.</p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-baby"></i>
+        </div>
+        <h3 class="feature-title">Pediatrics</h3>
+        <p class="feature-text">Specialized care for children from infancy through adolescence with child-friendly facilities.</p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-x-ray"></i>
+        </div>
+        <h3 class="feature-title">Radiology</h3>
+        <p class="feature-text">Advanced imaging services including MRI, CT scans, ultrasound, and digital X-ray with expert radiologists.</p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-bone"></i>
+        </div>
+        <h3 class="feature-title">Orthopedics</h3>
+        <p class="feature-text">Joint replacement, sports medicine, and fracture care with modern surgical techniques and rehabilitation.</p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-eye"></i>
+        </div>
+        <h3 class="feature-title">Ophthalmology</h3>
+        <p class="feature-text">Complete eye care including cataract surgery, laser treatments, and vision correction procedures.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container emergency-section">
+  <div class="emergency-icon">
+    <i class="fas fa-ambulance"></i>
+  </div>
+  <h2 class="emergency-title">Emergency Medical Services</h2>
+  <p class="emergency-text">Our emergency department is staffed 24/7 by board-certified emergency physicians and equipped with the latest life-saving technology. Average response time: under 15 minutes.</p>
+  <a class="emergency-button" href="/patientclick">
+    <i class="fas fa-phone-alt me-2"></i>
+    Call Emergency: 1122
+  </a>
+</div>
+
+<div class="container appointment-section">
+  <div class="appointment-form">
+    <h3 class="form-title">Schedule Your Visit</h3>
+    <form>
+      <div class="row">
+        <div class="col-md-6">
+          <input type="text" class="form-control" placeholder="Full Name" required>
+        </div>
+        <div class="col-md-6">
+          <input type="tel" class="form-control" placeholder="Phone Number" required>
+        </div>
+        <div class="col-md-6">
+          <input type="email" class="form-control" placeholder="Email Address" required>
+        </div>
+        <div class="col-md-6">
+          <select class="form-control" required>
+            <option value="">Select Department</option>
+            <option>Cardiology</option>
+            <option>Neurology</option>
+            <option>Pediatrics</option>
+            <option>Orthopedics</option>
+            <option>General Medicine</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <input type="date" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <select class="form-control" required>
+            <option value="">Preferred Time</option>
+            <option>9:00 AM - 11:00 AM</option>
+            <option>11:00 AM - 1:00 PM</option>
+            <option>2:00 PM - 4:00 PM</option>
+            <option>4:00 PM - 6:00 PM</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <textarea class="form-control" rows="4" placeholder="Additional Notes (Optional)"></textarea>
+        </div>
+        <div class="col-12 mt-4">
+          <button type="submit" class="cta-button w-100">
+            <i class="fas fa-paper-plane me-2"></i>
+            Confirm Appointment
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

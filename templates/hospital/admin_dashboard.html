@@ -1,0 +1,101 @@
+{% extends 'hospital/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  .logout-btn {
+    float: right;
+    margin: 15px;
+  }
+</style>
+
+<!-- LOGOUT BUTTON -->
+<div class="container-fluid">
+  <form method="POST" action="{% url 'logout' %}" class="logout-btn">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">
+      Logout
+    </button>
+  </form>
+</div>
+
+{% include 'hospital/admin_dashboard_cards.html' %}
+
+<br><br>
+
+<div class="container">
+  <div class="row">
+
+    <!-- RECENT DOCTORS -->
+    <div class="panel panel-primary col-md-5" style="margin-left:2%;">
+      <div class="panel-heading text-center">
+        <h4 class="panel-title">Recent Doctors</h4>
+      </div>
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Mobile</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for d in doctors %}
+          <tr>
+            <td>{{ d.get_name }}</td>
+            <td>{{ d.department }}</td>
+            <td>{{ d.mobile }}</td>
+            {% if d.status %}
+              <td><span class="label label-primary">Permanent</span></td>
+            {% else %}
+              <td><span class="label label-warning">On Hold</span></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RECENT PATIENTS -->
+    <div class="panel panel-primary col-md-5" style="margin-left:5%;">
+      <div class="panel-heading text-center">
+        <h4 class="panel-title">Recent Patients</h4>
+      </div>
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Symptoms</th>
+            <th>Mobile</th>
+            <th>Address</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for p in patients %}
+          <tr>
+            <td>{{ p.get_name }}</td>
+            <td>{{ p.symptoms }}</td>
+            <td>{{ p.mobile }}</td>
+            <td>{{ p.address }}</td>
+            {% if p.status %}
+              <td><span class="label label-primary">Admitted</span></td>
+            {% else %}
+              <td><span class="label label-warning">On Hold</span></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+{% endblock content %}

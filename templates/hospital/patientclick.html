@@ -1,0 +1,528 @@
+{% extends 'hospital/homebase.html' %}
+{% load static %}
+
+{% block content %}
+
+<head>
+  <style>
+    :root {
+      --primary-blue: #1a6b8c;
+      --primary-teal: #2a9d8f;
+      --accent-green: #8ac926;
+      --dark-blue: #15546e;
+      --light-bg: #f8fbfc;
+    }
+
+    .patient-hero {
+      background: linear-gradient(135deg, 
+                  rgba(42, 157, 143, 0.9) 0%, 
+                  rgba(26, 107, 140, 0.9) 100%),
+                  url('{% static "images/patient-hero.png" %}');
+      background-size: cover;
+      background-position: center;
+      padding: 120px 0 100px;
+      color: white;
+      text-align: center;
+      border-radius: 0 0 30px 30px;
+      margin-top: -20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .patient-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, 
+                  transparent 0%, 
+                  rgba(255, 255, 255, 0.1) 50%, 
+                  transparent 100%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .patient-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 12px 30px;
+      border-radius: 30px;
+      margin-bottom: 30px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .patient-hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .patient-hero .lead {
+      font-size: 1.4rem;
+      margin-bottom: 30px;
+      opacity: 0.95;
+      line-height: 1.6;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .patient-buttons {
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .gradient-button {
+      background: linear-gradient(135deg, var(--accent-green) 0%, #7bb820 100%);
+      color: white;
+      padding: 18px 45px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 15px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      min-width: 250px;
+      border: none;
+      box-shadow: 0 10px 25px rgba(138, 201, 38, 0.4);
+    }
+
+    .gradient-button:hover {
+      transform: translateY(-5px) scale(1.05);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 15px 35px rgba(138, 201, 38, 0.6);
+    }
+
+    .gradient-button.secondary {
+      background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+      box-shadow: 0 10px 25px rgba(26, 107, 140, 0.4);
+    }
+
+    .gradient-button.secondary:hover {
+      box-shadow: 0 15px 35px rgba(26, 107, 140, 0.6);
+    }
+
+    .gradient-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+                  transparent, 
+                  rgba(255, 255, 255, 0.2), 
+                  transparent);
+      transition: 0.5s;
+    }
+
+    .gradient-button:hover::before {
+      left: 100%;
+    }
+
+    .patient-features {
+      padding: 100px 20px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid transparent;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary-teal);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-teal), var(--accent-green));
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(42, 157, 143, 0.1) 0%, rgba(138, 201, 38, 0.1) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      font-size: 2.5rem;
+      color: var(--primary-teal);
+      border: 2px solid rgba(42, 157, 143, 0.2);
+    }
+
+    .feature-card h3 {
+      color: var(--dark-blue);
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .feature-card p {
+      color: #6c757d;
+      line-height: 1.7;
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      color: var(--dark-blue);
+      font-size: 2.8rem;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+
+    .section-subtitle {
+      color: #6c757d;
+      font-size: 1.3rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .patient-benefits {
+      background: linear-gradient(135deg, #f0f9f8 0%, #e6f7f5 100%);
+      padding: 100px 20px;
+      border-radius: 30px;
+      margin: 60px auto;
+      max-width: 1200px;
+    }
+
+    .benefit-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 50px;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 25px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .benefit-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .benefit-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, rgba(42, 157, 143, 0.1) 0%, rgba(138, 201, 38, 0.1) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary-teal);
+      flex-shrink: 0;
+    }
+
+    .benefit-content h4 {
+      color: var(--dark-blue);
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .benefit-content p {
+      color: #6c757d;
+      line-height: 1.6;
+    }
+
+    .appointment-cta {
+      background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+      padding: 80px 40px;
+      border-radius: 25px;
+      color: white;
+      text-align: center;
+      margin: 60px auto;
+      max-width: 1000px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .appointment-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+    }
+
+    .appointment-cta h2 {
+      font-size: 2.8rem;
+      margin-bottom: 25px;
+      font-weight: 800;
+      position: relative;
+      z-index: 2;
+    }
+
+    .appointment-cta p {
+      font-size: 1.3rem;
+      margin-bottom: 40px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0.95;
+      line-height: 1.6;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-button {
+      background: white;
+      color: var(--primary-blue);
+      padding: 20px 50px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 15px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-button:hover {
+      background: #f8fbfc;
+      color: var(--dark-blue);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .patient-hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .patient-hero .lead {
+        font-size: 1.2rem;
+      }
+      
+      .patient-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      
+      .gradient-button {
+        width: 100%;
+        max-width: 300px;
+        min-width: auto;
+      }
+      
+      .section-title {
+        font-size: 2.2rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .appointment-cta h2 {
+        font-size: 2.2rem;
+      }
+      
+      .appointment-cta {
+        padding: 60px 25px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<div class="patient-hero">
+  <div class="container">
+    <div class="patient-badge">
+      <i class="fas fa-user-injured me-2"></i>Patient Care Portal
+    </div>
+    <h1>Welcome to Patient Care</h1>
+    <p class="lead">At Pakistan Medical Hospital, we're dedicated to providing you with exceptional healthcare services. Manage your appointments, access medical records, and connect with your healthcare team.</p>
+    
+    <div class="patient-buttons">
+      <a class="gradient-button" href="/patientsignup">
+        <i class="fas fa-user-plus me-2"></i>
+        Create Account
+      </a>
+      <a class="gradient-button secondary" href="/patientlogin">
+        <i class="fas fa-sign-in-alt me-2"></i>
+        Patient Login
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="container patient-features">
+  <h2 class="section-title">Your Healthcare Management Tools</h2>
+  <p class="section-subtitle">Access comprehensive healthcare services and manage your medical journey with our easy-to-use patient portal.</p>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <h3>Easy Appointment Booking</h3>
+      <p>Schedule appointments with specialists, view available slots, and receive automated reminders for your visits.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-file-medical-alt"></i>
+      </div>
+      <h3>Digital Medical Records</h3>
+      <p>Access your complete medical history, test results, prescriptions, and treatment plans securely online.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-comments-medical"></i>
+      </div>
+      <h3>Doctor Communication</h3>
+      <p>Connect with your healthcare providers, ask questions, and receive follow-up care instructions.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-pills"></i>
+      </div>
+      <h3>Prescription Management</h3>
+      <p>View current prescriptions, request refills, and set medication reminders for better adherence.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container patient-benefits">
+  <h2 class="section-title">Why Register as a Patient?</h2>
+  <p class="section-subtitle">Join thousands of satisfied patients who trust Pakistan Medical Hospital for their healthcare needs.</p>
+  
+  <div class="benefit-list">
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>24/7 Access</h4>
+        <p>Access your medical information and book appointments anytime, from anywhere in Pakistan.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Secure & Private</h4>
+        <p>Your health information is protected with military-grade encryption and strict privacy controls.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-history"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Medical History Tracking</h4>
+        <p>Maintain a complete digital record of your medical journey, treatments, and health progress.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-bell"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Smart Reminders</h4>
+        <p>Receive timely reminders for appointments, medication schedules, and preventive screenings.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-file-invoice-dollar"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Bill Management</h4>
+        <p>View and pay medical bills online, track insurance claims, and access payment history.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-heartbeat"></i>
+      </div>
+      <div class="benefit-content">
+        <h4>Health Monitoring</h4>
+        <p>Track vital signs, symptoms, and health metrics to share with your healthcare team.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container appointment-cta">
+  <h2>Ready to Take Control of Your Health?</h2>
+  <p>Join Pakistan Medical Hospital's patient community today. Register for an account to access premium healthcare services and manage your health journey with confidence.</p>
+  <a class="cta-button" href="/patientsignup">
+    <i class="fas fa-user-plus me-2"></i>
+    Register Now - It's Free
+  </a>
+</div>
+
+{% endblock content %}

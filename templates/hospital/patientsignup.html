@@ -1,0 +1,700 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Pakistan Medical Hospital - Patient Registration</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-blue: #1a6b8c;
+      --primary-teal: #2a9d8f;
+      --accent-green: #8ac926;
+      --light-bg: #f8fbfc;
+      --dark-blue: #15546e;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fbfc 0%, #e3f2fd 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .registration-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .registration-card {
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      max-width: 1000px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .registration-header {
+      background: linear-gradient(135deg, var(--primary-teal) 0%, var(--primary-blue) 100%);
+      padding: 40px;
+      color: white;
+      text-align: center;
+    }
+
+    .registration-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .registration-header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .registration-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+
+    .form-content {
+      padding: 50px;
+    }
+
+    .form-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      color: var(--dark-blue);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--primary-teal);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--primary-teal);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-group label {
+      color: var(--dark-blue);
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group label i {
+      color: var(--primary-teal);
+      width: 20px;
+    }
+
+    .form-control {
+      border: 2px solid #e3f2fd;
+      border-radius: 12px;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      background: #f8fbfc;
+      width: 100%;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-teal);
+      box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
+      background: white;
+    }
+
+    .form-control::placeholder {
+      color: #a0aec0;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon .form-control {
+      padding-left: 50px;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary-blue);
+      z-index: 4;
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%231a6b8c' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 20px center;
+      background-size: 16px;
+      padding-right: 50px;
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .file-upload {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
+
+    .file-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      background: #f8fbfc;
+      border: 2px dashed #e3f2fd;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .file-upload-label:hover {
+      background: #e3f2fd;
+      border-color: var(--primary-teal);
+    }
+
+    .file-upload-label i {
+      color: var(--primary-blue);
+      font-size: 1.2rem;
+    }
+
+    .file-name {
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--accent-green) 0%, #7bb820 100%);
+      color: white;
+      border: none;
+      padding: 18px 50px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      margin: 40px auto 20px;
+      cursor: pointer;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(138, 201, 38, 0.4);
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 30px;
+      color: #6c757d;
+    }
+
+    .login-link a {
+      color: var(--primary-blue);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .login-link a:hover {
+      color: var(--dark-blue);
+      gap: 12px;
+    }
+
+    .password-strength {
+      margin-top: 8px;
+      font-size: 0.9rem;
+    }
+
+    .strength-meter {
+      height: 4px;
+      background: #e9ecef;
+      border-radius: 2px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-green);
+      transition: width 0.3s ease;
+    }
+
+    .requirements-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .requirements-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      color: #6c757d;
+    }
+
+    .requirements-list li i {
+      color: #adb5bd;
+      font-size: 0.8rem;
+    }
+
+    .requirements-list li.valid i {
+      color: var(--accent-green);
+    }
+
+    .required-mark {
+      color: #e63946;
+      margin-left: 3px;
+    }
+
+    .form-note {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+      border-left: 4px solid var(--primary-teal);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+
+    .form-note h5 {
+      color: var(--dark-blue);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-note p {
+      color: #6c757d;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .doctor-select-info {
+      background: linear-gradient(135deg, #f0f9f8 0%, #e6f7f5 100%);
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 10px;
+      border: 1px solid #d1e7dd;
+    }
+
+    .doctor-select-info p {
+      color: var(--dark-blue);
+      margin: 0;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .doctor-select-info i {
+      color: var(--primary-teal);
+    }
+
+    @media (max-width: 992px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .registration-container {
+        padding: 20px 15px;
+      }
+      
+      .registration-header {
+        padding: 30px 20px;
+      }
+      
+      .registration-header h1 {
+        font-size: 2rem;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .form-content {
+        padding: 30px 20px;
+      }
+      
+      .section-title {
+        font-size: 1.3rem;
+      }
+      
+      .btn-submit {
+        padding: 16px 40px;
+        font-size: 1.2rem;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .registration-header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .registration-header p {
+        font-size: 1rem;
+      }
+      
+      .form-content {
+        padding: 25px 15px;
+      }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Password strength indicator
+      const passwordInput = document.querySelector('input[name="password"]');
+      const strengthMeter = document.querySelector('.strength-fill');
+      const requirements = document.querySelectorAll('.requirements-list li');
+      
+      if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+          const password = this.value;
+          let strength = 0;
+          
+          requirements.forEach(req => {
+            const text = req.textContent;
+            let isValid = false;
+            
+            if (text.includes('8 characters')) {
+              isValid = password.length >= 8;
+            } else if (text.includes('uppercase')) {
+              isValid = /[A-Z]/.test(password);
+            } else if (text.includes('lowercase')) {
+              isValid = /[a-z]/.test(password);
+            } else if (text.includes('number')) {
+              isValid = /[0-9]/.test(password);
+            }
+            
+            if (isValid) {
+              req.classList.add('valid');
+              req.querySelector('i').className = 'fas fa-check-circle';
+              strength += 25;
+            } else {
+              req.classList.remove('valid');
+              req.querySelector('i').className = 'fas fa-circle';
+            }
+          });
+          
+          if (strengthMeter) {
+            strengthMeter.style.width = strength + '%';
+          }
+        });
+      }
+      
+      // File upload preview
+      const fileInput = document.querySelector('input[type="file"]');
+      const fileName = document.querySelector('.file-name');
+      
+      if (fileInput) {
+        fileInput.addEventListener('change', function() {
+          if (this.files && this.files[0]) {
+            fileName.textContent = this.files[0].name;
+            fileName.style.color = 'var(--primary-teal)';
+          }
+        });
+      }
+      
+      // Phone number formatting for Pakistan
+      const phoneInput = document.querySelector('input[name="mobile"]');
+      if (phoneInput) {
+        phoneInput.addEventListener('input', function() {
+          let value = this.value.replace(/\D/g, '');
+          
+          // Ensure it starts with 03 for Pakistan mobile numbers
+          if (value.length > 0 && !value.startsWith('03')) {
+            this.value = '03' + value.substring(2);
+          } else {
+            this.value = value;
+          }
+          
+          // Limit to 11 digits
+          if (value.length > 11) {
+            this.value = value.substring(0, 11);
+          }
+        });
+      }
+    });
+  </script>
+</head>
+
+<body>
+  {% include "hospital/navbar.html" %}
+  
+  <div class="registration-container">
+    <div class="registration-card">
+      <div class="registration-header">
+        <h1>
+          <div class="registration-icon">
+            <i class="fas fa-user-injured"></i>
+          </div>
+          Patient Registration
+        </h1>
+        <p>Register as a patient at Pakistan Medical Hospital to access our comprehensive healthcare services and manage your medical journey.</p>
+      </div>
+      
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-content">
+          <div class="form-section">
+            <h3 class="section-title">
+              <i class="fas fa-user-circle"></i>
+              Personal Information
+            </h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>
+                  <i class="fas fa-user"></i>
+                  First Name<span class="required-mark">*</span>
+                </label>
+                <div class="input-with-icon">
+                  <i class="fas fa-user input-icon"></i>
+                  {% render_field userForm.first_name class="form-control" placeholder="Enter your first name" required="required" %}
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label>
+                  <i class="fas fa-user"></i>
+                  Last Name<span class="required-mark">*</span>
+                </label>
+                <div class="input-with-icon">
+                  <i class="fas fa-user input-icon"></i>
+                  {% render_field userForm.last_name class="form-control" placeholder="Enter your last name" required="required" %}
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>
+                  <i class="fas fa-at"></i>
+                  Username<span class="required-mark">*</span>
+                </label>
+                <div class="input-with-icon">
+                  <i class="fas fa-at input-icon"></i>
+                  {% render_field userForm.username class="form-control" placeholder="Choose a unique username" required="required" %}
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label>
+                  <i class="fas fa-key"></i>
+                  Password<span class="required-mark">*</span>
+                </label>
+                <div class="input-with-icon">
+                  <i class="fas fa-key input-icon"></i>
+                  {% render_field userForm.password class="form-control" placeholder="Create a secure password" required="required" %}
+                </div>
+                
+                <div class="password-strength">
+                  <div class="strength-meter">
+                    <div class="strength-fill"></div>
+                  </div>
+                  <ul class="requirements-list">
+                    <li><i class="fas fa-circle"></i> At least 8 characters</li>
+                    <li><i class="fas fa-circle"></i> Contains uppercase letter</li>
+                    <li><i class="fas fa-circle"></i> Contains lowercase letter</li>
+                    <li><i class="fas fa-circle"></i> Contains a number</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h3 class="section-title">
+              <i class="fas fa-address-card"></i>
+              Contact Information
+            </h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>
+                  <i class="fas fa-phone-alt"></i>
+                  Mobile Number<span class="required-mark">*</span>
+                </label>
+                <div class="input-with-icon">
+                  <i class="fas fa-phone-alt input-icon"></i>
+                  {% render_field patientForm.mobile class="form-control" placeholder="03xx-xxxxxxx" required="required" maxlength="11" %}
+                </div>
+                <small class="text-muted">Enter Pakistani mobile number starting with 03</small>
+              </div>
+              
+              <div class="form-group">
+                <label>
+                  <i class="fas fa-map-marker-alt"></i>
+                  Address<span class="required-mark">*</span>
+                </label>
+                <div class="input-with-icon">
+                  <i class="fas fa-map-marker-alt input-icon"></i>
+                  {% render_field patientForm.address class="form-control" placeholder="Enter your complete address" required="required" %}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h3 class="section-title">
+              <i class="fas fa-heartbeat"></i>
+              Medical Information
+            </h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>
+                  <i class="fas fa-user-md"></i>
+                  Preferred Doctor
+                </label>
+                <div class="input-with-icon">
+                  <i class="fas fa-user-md input-icon"></i>
+                  {% render_field patientForm.assignedDoctorId class="form-control" %}
+                </div>
+                <div class="doctor-select-info">
+                  <p><i class="fas fa-info-circle"></i> You can select a specific doctor or leave this for general consultation</p>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label>
+                  <i class="fas fa-stethoscope"></i>
+                  Symptoms / Health Concerns
+                </label>
+                <div class="input-with-icon">
+                  <i class="fas fa-stethoscope input-icon"></i>
+                  {% render_field patientForm.symptoms class="form-control" placeholder="Describe your symptoms or health concerns" %}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h3 class="section-title">
+              <i class="fas fa-id-card"></i>
+              Profile Picture
+            </h3>
+            
+            <div class="form-group">
+              <label>
+                <i class="fas fa-camera"></i>
+                Upload Photo
+              </label>
+              <div class="file-upload">
+                <label class="file-upload-label">
+                  <span>
+                    <i class="fas fa-cloud-upload-alt me-2"></i>
+                    Upload Profile Picture
+                  </span>
+                  <i class="fas fa-file-image"></i>
+                </label>
+                {% render_field patientForm.profile_pic class="form-control" style="display: none;" %}
+                <span class="file-name">No file chosen (Optional)</span>
+              </div>
+              <small class="text-muted">Upload a clear photo of yourself (JPEG or PNG, max 2MB)</small>
+            </div>
+          </div>
+          
+          <div class="form-note">
+            <h5><i class="fas fa-shield-alt"></i> Privacy & Security</h5>
+            <p>Your personal and medical information is protected under Pakistan's Healthcare Privacy Laws. All data is encrypted and accessible only to authorized medical personnel involved in your care.</p>
+          </div>
+          
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-user-plus"></i>
+            Complete Registration
+          </button>
+          
+          <div class="login-link">
+            Already have a patient account?
+            <a href="/patientlogin">
+              <i class="fas fa-sign-in-alt"></i>
+              Login to Your Account
+            </a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  {% include "hospital/footer.html" %}
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
